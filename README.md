@@ -1,7 +1,8 @@
 # COMP472
 
-Group FS_15 - Part 1
+COMP 472 Project - Part 1
 
-Alexanne Marcil - 
-Safira Sari - 40249017
-Nguyen-My-Linh Tang -
+## Members of Group FS_15
+- Alexanne Marcil - 
+- Safira Sari - 40249017
+- Nguyen-My-Linh Tang -
