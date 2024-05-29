@@ -11,7 +11,7 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 
 
 ## Features
-- Datasets of 4 facial expressions of __ images: neutral, focused, angry & happy
+- Datasets of 4 facial expressions: neutral, focused, angry & happy
 - Data cleaning
 - Data visualization
 
@@ -22,7 +22,7 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 - README: Overview of the project containing instructions on running the porgram.
 - Report: Project report detailing each section (PDF)
 - Originality Form: 1 for each member included in the report.
-- 
+  
 
 ## Setup
 This Python project was made using Spyder, Anaconda Prompt and the virtual environment created in class named `comp472`
