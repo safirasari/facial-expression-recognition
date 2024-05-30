@@ -7,7 +7,7 @@
 
 
 ## Part 1: Data Collection, Cleaning, Labeling & Preliminary Analysis
-This project aims to create an AI for a Deep Learning Convolutional Neural Network (CNN) to analyze facial expressions, notably neutral, focused, angry & happy. In part 1, datasets have been taken of various classes, used for training and testing the model. To ensure that the pictures in the dataset are consistent, data cleaning was applied, ensuring that all images are in grayscale and the same dimension (48x48 pixels) for standardization. Data visualization was also.
+This project aims to create an AI for a Deep Learning Convolutional Neural Network (CNN) to analyze facial expressions, notably neutral, focused, angry & happy. In part 1, datasets have been taken of various classes, used for training and testing the model. To ensure that the pictures in the dataset are consistent, data cleaning was applied, ensuring that all images are in grayscale and the same dimension (48x48 pixels) for standardization. Data is also visualized.
 
 
 ## Features
@@ -56,6 +56,9 @@ This Python project was made using Spyder, Anaconda Prompt and the virtual envir
     $ python data_cleaning.py
     ```
    
-5. 
+5.  Run the Python script for data visualization:
+    ```
+    $ python data_visualization.py
+    ```
 
    
