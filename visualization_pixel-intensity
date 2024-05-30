@@ -1,0 +1,57 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+import glob
+
+
+def aggregate_pixel(emotion):
+    
+    
+
+    return emotion
+
+
+
+def addlabels(x,y):
+    for i in range(len(x)):
+        plt.text(i,y[i],y[i])
+
+# Plotting the histogram - Neutral 
+'''
+plt.bar(x1,y1)
+addlabels(x1,y1)
+plt.title("Pixel Intensity Distribution: Neutral")
+plt.xlabel("Grayscale Value")
+plt.ylabel("Pixel Count")
+plt.show()
+'''
+
+# Plotting the histogram - Focused 
+'''
+plt.bar(x2,y2)
+addlabels(x2,y2)
+plt.title("Pixel Intensity Distribution: Focused")
+plt.xlabel("Grayscale Value")
+plt.ylabel("Pixel Count")
+plt.show()
+'''
+
+# Plotting the histogram - Angry 
+'''
+plt.bar(x3,y3)
+addlabels(x3,y3)
+plt.title("Pixel Intensity Distribution: Angry")
+plt.xlabel("Grayscale Value")
+plt.ylabel("Pixel Count")
+plt.show()
+'''
+
+# Plotting the histogram - Happy 
+'''
+plt.bar(x4,y4)
+addlabels(x4,y4)
+plt.title("Pixel Intensity Distribution: Happy")
+plt.xlabel("Grayscale Value")
+plt.ylabel("Pixel Count")
+plt.show()
+'''
