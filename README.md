@@ -18,8 +18,8 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 
 
 ## Deliverables
-- Python Code: Includes the scripts for data cleaning (`data_cleaning.py`) and data visualization (`data_visualization.py`)
-- Dataset:
+- Python Code: Includes the scripts for data cleaning (`data_cleaning.py`) and data visualization (`barChart.py`)
+- Dataset: Sourced from Kaggle - https://www.kaggle.com/datasets/msambare/fer2013/data
 - README: Overview of the project containing instructions on running the porgram.
 - Report: Project report detailing each section (PDF)
 - Originality Form: 1 for each member included in the report.
@@ -59,7 +59,7 @@ This Python project was made using Spyder, Anaconda Prompt and the virtual envir
    
 5.  Run the Python script for data visualization:
     ```
-    $ python data_visualization.py
+    $ python barChart.py
     ```
 
    
