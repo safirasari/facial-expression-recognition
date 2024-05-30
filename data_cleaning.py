@@ -4,7 +4,7 @@ import cv2
 # Getting current directory
 current_dir = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
 
-# Getting path of the image file under the folder 'training'
+# Getting path of the image file under the folder 'datasets'
 path_folder_pics = os.path.join(current_dir, 'datasets')
 
 # Loop through all directories and files in the dataset
