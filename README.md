@@ -1,4 +1,5 @@
 # COMP472 - SmartClass A.I.ssistant
+Link: https://github.com/SafiraSari/COMP472
 
 ## Members of Group FS_15
 - Alexanne Marcil - 40248764
@@ -43,7 +44,7 @@ This Python project was made using Spyder, Anaconda Prompt and the virtual envir
    ```
    - Scikit-learn
     ```
-    conda install scikit-learn
+    $ conda install scikit-learn
     ```
 
 3. Open the repository in which the Python script is in:
