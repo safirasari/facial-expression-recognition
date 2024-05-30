@@ -11,7 +11,7 @@ def data_cleaning():
     path_folder_pics = os.path.join(current_dir, 'datasets')
     
     # Defining valid image extensions
-    image_extensions = ['*.jpg', '*.jpeg', '*.png', '*.heic']
+    image_extensions = ['.jpg', '.jpeg', '.png', '.heic']
     
     # Loop through all directories and files in the dataset
     for root, dirs, files in os.walk(path_folder_pics):
