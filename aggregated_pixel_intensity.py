@@ -35,7 +35,7 @@ def histClass(imageClass):
     i += 1
     axis[x, y].hist(x=classArray, bins=256, range=[0,256])
     axis[x,y].set_title(imageClass.capitalize())
-    axis[x,y].set_ylabel("Number of Pixels with the Pixel Intensity")
+    axis[x,y].set_ylabel("Number of Pixels")
     axis[x,y].set_xlabel("Pixel Intensity")
 
     

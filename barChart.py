@@ -47,12 +47,13 @@ def addlabels(x,y):
         plt.text(i,y[i],y[i])
 
 # plotting the graph with its characteristics
-plt.bar(x,y)
-addlabels(x,y)
-plt.title("Number of Images per Class in our Dataset")
-plt.xlabel("Emotion Class")
-plt.ylabel("Number of Images")
-plt.show()
+if __name__ == "__main__":
+    plt.bar(x,y)
+    addlabels(x,y)
+    plt.title("Number of Images per Class in our Dataset")
+    plt.xlabel("Emotion Class")
+    plt.ylabel("Number of Images")
+    plt.show()
 
 
 
