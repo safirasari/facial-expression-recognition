@@ -28,6 +28,7 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 ## Setup
 This Python project was made using Spyder, Anaconda Prompt and the virtual environment created in class named `comp472`
 For the scripts to run correctly, the datasets need to be in the same relative directory to the script as in this repository :
+    ```
     project_directory/
     ├─ datasets/
     │  ├─ test/
@@ -40,6 +41,7 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     │  │  ├─ happy/
     │  │  ├─ neutral/
     │  │  ├─ focused/
+    ```
 
 1. Activate the virtual environment:
    ```
