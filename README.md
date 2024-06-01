@@ -18,7 +18,7 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 
 
 ## Deliverables
-- Python Code: Includes the scripts for data cleaning (`data_cleaning.py`) and data visualization (`barChart.py`)
+- Python Code: Includes the scripts for data cleaning and data visualization
 - Dataset: Sourced from Kaggle - https://www.kaggle.com/datasets/msambare/fer2013/data
 - README: Overview of the project containing instructions on running the program
 - Report: Project report detailing each section (PDF)
