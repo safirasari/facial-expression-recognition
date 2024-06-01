@@ -27,6 +27,19 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 
 ## Setup
 This Python project was made using Spyder, Anaconda Prompt and the virtual environment created in class named `comp472`
+For the scripts to run correctly, the datasets need to be in the same relative directory to the script as in this repository :
+    project_directory/
+    ├─ datasets/
+    │  ├─ test/
+    │  │  ├─ angry/
+    │  │  ├─ happy/
+    │  │  ├─ focused/
+    │  │  ├─ neutral/
+    │  ├─ train/
+    │  │  ├─ angry/
+    │  │  ├─ happy/
+    │  │  ├─ neutral/
+    │  │  ├─ focused/
 
 1. Activate the virtual environment:
    ```
@@ -51,15 +64,24 @@ This Python project was made using Spyder, Anaconda Prompt and the virtual envir
     ```
     $ cd "repository"
     ```
- 
+
 4. Run the Python script for data cleaning and standardization:
     ```
     $ python data_cleaning.py
     ```
    
-5.  Run the Python script for data visualization:
+5.  Run the Python scripts for data visualization:
     ```
     $ python barChart.py
+    ```
+    ```
+    $ python aggregated_pixel_intensity.py
+    ```
+    ```
+    $ python sample_images_neutral.py
+    $ python sample_images_angry.py
+    $ python sample_images_focused.py
+    $ python sample_images_happy.py
     ```
 
    
