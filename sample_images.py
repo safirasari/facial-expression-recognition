@@ -19,9 +19,8 @@ def create_plot(imageClass, datasetPath):
     axisIndex = 0;
     totalNumberOfImages = total_count(imageClass)
     imagesToPlot = generate_15_random_numbers(totalNumberOfImages)
-    classTrainPath = os.path.join(datasetPath, "train", imageClass)
-    classTestPath = os.path.join(datasetPath, "test", imageClass)
-    imageFiles = list(os.scandir(classTrainPath)) + list(os.scandir(classTestPath))
+    classPath = os.path.join(datasetPath, imageClass)
+    imageFiles = list(os.scandir(classPath))
     selectedFiles = [imageFiles[i] for i in imagesToPlot]
     
     for file in selectedFiles:
