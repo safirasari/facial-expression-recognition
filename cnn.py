@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 if __name__ == '__main__':
     
     # Hyper-parameters
-    num_epochs = 10         # Min of 10 epochs
+    num_epochs = 15         # Min of 10 epochs
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
     learning_rate = 0.001
     
@@ -151,26 +151,39 @@ if __name__ == '__main__':
         class_total = [0 for i in range(4)]
                
         for images, labels in test_loader:
+            
             # Prediction
             outputs = modelA(images)
-            _, predicted = torch.max(outputs.data, 1)
+            _, predicted = torch.max(outputs, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
             
             # Calculating accuracy of each class
+            '''
             for i in range(num_classes):
                 label = labels[i]
                 pred = predicted[i]
                 if (label == pred):
                     class_correct[label] += 1
                 class_total[label] += 1
+            '''  
+            
+            for label, pred in zip(labels, predicted):
+                if label == pred:
+                    class_correct[label] += 1
+                class_total[label] += 1
                     
         # Displaying accuracy overall
         accuracy = (correct / total) * 100
+        print(f'Correct: {correct}')
+        print(f'Total: {total}')
         print('Test Accuracy of the model on the test images: {} %'.format(accuracy))
         
         # Displaying accuracy for each class
         for i in range(4):
+            print(f'Class_correct: {class_correct[i]}')
+            print(f'Class_total: {class_total[i]}')
+            
             if class_total[i] != 0:
                 accuracy = 100.0 * class_correct[i] / class_total[i]
                 print(f'Accuracy of {classes[i]}: {accuracy} %')
