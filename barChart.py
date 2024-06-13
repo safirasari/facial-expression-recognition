@@ -16,26 +16,13 @@ def count_images_in_folder(folder_path):
         # Add the number of files found to the total count
         image_count += len(files)
     return image_count
-
-def class_image_count_test(emotion): 
-    # Define the folder path relative to the current script location
-    dir_path = os.path.join(os.getcwd(), 'datasets', 'test', emotion) 
-    # Count the images in the 'emotion' folder
-    image_number = count_images_in_folder(dir_path)
-    return image_number
-
-def class_image_count_train(emotion): 
-    # Count number of emotion images for the train folder
-    dir_path = os.path.join(os.getcwd(), 'datasets', 'train', emotion) 
-    image_number = count_images_in_folder(dir_path)
-    return image_number
+    
 
 def total_count(emotion):
     # Compute total of images per class
-    test_count = class_image_count_test(emotion)
-    train_count = class_image_count_train(emotion)
-    total_count = test_count + train_count
-    return total_count
+    dir_path = os.path.join(os.getcwd(), 'datasets', emotion) 
+    image_number = count_images_in_folder(dir_path)
+    return image_number
     
 # variables for the graph
 x = ["Neutral", "Focused", "Angry", "Happy"]

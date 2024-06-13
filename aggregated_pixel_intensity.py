@@ -3,7 +3,7 @@ import numpy as np
 import os
 import cv2
 
-classes = ["angry", "happy", "focused", "neutral"]
+classes = ["neutral", "angry", "happy", "focused"]
 currentDir = os.path.normpath(os.path.dirname(__file__) if "__file__" in locals() else os.getcwd())
 imageExt = ['.jpg', '.jpeg', '.png', '.heic']
 datasetPath = os.path.join(currentDir, 'datasets')
@@ -26,11 +26,8 @@ def directory_images_to_array(path):
             
 def histClass(imageClass):
     global i
-    classTrainPath = os.path.join(datasetPath, "train", imageClass)
-    classTestPath = os.path.join(datasetPath, "test", imageClass)
-    classTrainArray = directory_images_to_array(classTrainPath)
-    classTestArray = directory_images_to_array(classTestPath)
-    classArray = np.concatenate((classTrainArray, classTestArray))
+    classPath = os.path.join(datasetPath, imageClass)
+    classArray = directory_images_to_array(classPath)
     x, y = subplotAxis[i]
     i += 1
     axis[x, y].hist(x=classArray, bins=256, range=[0,256])
