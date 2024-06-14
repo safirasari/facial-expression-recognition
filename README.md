@@ -7,8 +7,14 @@ Link: https://github.com/SafiraSari/COMP472
 - Nguyen-My-Linh Tang - 40229505
 
 
-## Part 1: Data Collection, Cleaning, Labeling & Preliminary Analysis
-This project aims to create an AI for a Deep Learning Convolutional Neural Network (CNN) to analyze facial expressions, notably neutral, focused, angry & happy. In part 1, datasets have been taken of various classes, used for training and testing the model. To ensure that the pictures in the dataset are consistent, data cleaning was applied, ensuring that all images are in grayscale and the same dimension (48x48 pixels) for standardization. Data is also visualized.
+## Project
+This project aims to create an AI for a Deep Learning Convolutional Neural Network (CNN) to analyze facial expressions, notably neutral, focused, angry & happy. 
+
+### Part 1:  Data Collection, Cleaning, Labeling & Preliminary Analysis
+Datasets have been taken of various classes, used for training and testing the model. To ensure that the pictures in the dataset are consistent, data cleaning was applied, ensuring that all images are in grayscale and the same dimension (48x48 pixels) for standardization. Data is also visualized, including the class distribution, pixel intensity disribution and sample images. 
+
+### Part 2: Basic CNN Model & Evaluation
+Using PyTorch, the CNN architecture is defined through the optimization of various hyper-parameters, such as the number of epochs, kernel size, learning rate, number of convolution layers, and more. To prevent overfitting, dropout values were included, along with early stopping. The model underwent a training phase, a validation phase and a testing phase - the overall test accuracy was then measured to assess its prediction on unseen data of facial expressions. 3 types of models are saved: Main Model, Variant 1 and Variant 2.
 
 
 ## Features
@@ -47,13 +53,18 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     ```
     $ conda install scikit-learn
     ```
+    - PyTorch
+    ```
+    $ conda install pytorch torchvision -c pytorch
+    ```
+    
 
 3. Open the repository in which the Python script is in:
     ```
     $ cd "repository"
     ```
 
-4. Run the Python script for data cleaning and standardization:
+4. For Part 1, run the Python script for data cleaning and standardization:
     ```
     $ python data_cleaning.py
     ```
@@ -71,5 +82,9 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     $ python sample_images_focused.py
     $ python sample_images_happy.py
     ```
-
+6. For part 2, run the model:
+    ```
+    $ python cnn.py
+    ```
+7. 
    
