@@ -14,13 +14,13 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 Datasets have been taken of various classes, used for training and testing the model. To ensure that the pictures in the dataset are consistent, data cleaning was applied, ensuring that all images are in grayscale and the same dimension (48x48 pixels) for standardization. Data is also visualized, including the class distribution, pixel intensity disribution and sample images. 
 
 ### Part 2: Basic CNN Model & Evaluation
-Using PyTorch, the CNN architecture is defined through the optimization of various hyper-parameters, such as the number of epochs, kernel size, learning rate, number of convolution layers, and more. To prevent overfitting, dropout values were included, along with early stopping. The model underwent a training phase, a validation phase and a testing phase - the overall test accuracy was then measured to assess its prediction on unseen data of facial expressions. 3 types of models are saved: Main Model, Variant 1 and Variant 2.
+Using PyTorch, the CNN architecture is defined through the optimization of various hyper-parameters, such as the number of epochs, kernel size, learning rate, number of convolution layers, and more. To prevent overfitting, dropout values were included, along with early stopping. The model underwent a training phase, a validation phase and a testing phase - the overall test accuracy was then measured to assess its prediction on unseen data of facial expressions. 3 types of models are saved: Main Model, Variant 1 and Variant 2. It is then evaluated through precision metrics and plotting the confusion matrix of each class.
 
 
 ## Features
 - Datasets of 4 facial expressions: neutral, focused, angry & happy
-- Data cleaning
-- Data visualization
+- Data cleaning & visualization
+- CNN Model & Evaluation (precision metrics and confusion matrices)
 
 
 ## Deliverables
