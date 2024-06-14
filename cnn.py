@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader, SubsetRandomSampler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
 import matplotlib.pyplot as plt
-import seaborn as sns
+# import seaborn as sns
 
  # Transformation to ensure consistency
 transform = transforms.Compose([
@@ -20,11 +20,18 @@ if __name__ == '__main__':
     # Hyper-parameters
     num_epochs = 15         # Min of 10 epochs
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
-    learning_rate = 0.001
+    learning_rate = 0.0005
     
     train_batch_size = 32
     val_batch_size = 32
     test_batch_size = 1000
+    
+    # Transformation to ensure consistency
+    transform = transforms.Compose([
+        transforms.Grayscale(num_output_channels=1),    # 1 channel for grayscale
+        transforms.ToTensor(),                          # Convert to tensor
+        transforms.Normalize((0.5,), (0.5,))            # Center data around 0 (instead of [0,1])
+    ])
     
 
     # Load the dataset
@@ -70,31 +77,33 @@ if __name__ == '__main__':
         def __init__(self):
             super(CNN, self).__init__()
             self.conv_layer = nn.Sequential(
-                nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1),
+                nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding=2),
                 nn.BatchNorm2d(32),
                 nn.LeakyReLU(inplace=True),
-                nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1),
+                nn.Conv2d(in_channels=32, out_channels=32, kernel_size=5, padding=2),
                 nn.BatchNorm2d(32),
                 nn.LeakyReLU(inplace=True),
                 nn.MaxPool2d(kernel_size=2, stride=2),
-                nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1),
+                nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
                 nn.BatchNorm2d(64),
                 nn.LeakyReLU(inplace=True),
-                nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1),
+                nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5, padding=2),
                 nn.BatchNorm2d(64),
                 nn.LeakyReLU(inplace=True),
                 nn.MaxPool2d(kernel_size=2, stride=2),
             )
-    
+            
             self.fc_layer = nn.Sequential(
-                nn.Dropout(p=0.1),
-                nn.Linear(12 * 12 * 64, 1000),
+                nn.Dropout(p=0.5),
+                # nn.Linear(64 * 10 * 10, 1000),         # kernel 2x2
+                nn.Linear(12 * 12 * 64, 1000),         # kernel 3x3, 5x5, 7x7
                 nn.ReLU(inplace=True),
                 nn.Linear(1000, 512),
                 nn.ReLU(inplace=True),
-                nn.Dropout(p=0.1),
+                nn.Dropout(p=0.5),
                 nn.Linear(512, 4)       # 4 classes
             )
+            
             
         def forward(self, x):
             # conv layers
@@ -119,7 +128,10 @@ if __name__ == '__main__':
     acc_list = []
     
     # Training the model
+    print('\nTRAINING PHASE:')
     for epoch in range(num_epochs):
+        
+        modelA.train()              # Training mode
         
         for i, (images, labels) in enumerate(train_loader):
             
@@ -143,9 +155,24 @@ if __name__ == '__main__':
             if (i + 1) % 10 == 0:
                 print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
                       .format(epoch + 1, num_epochs, i + 1, total_step, loss.item(),(correct / total) * 100))
-             
+                
+        # Validation phase
+        modelA.eval()
+        val_correct = 0
+        val_total = 0
+        with torch.no_grad():
+            for images, labels in val_loader:
+                outputs = modelA(images)
+                _, predicted = torch.max(outputs.data, 1)
+                val_total += labels.size(0)
+                val_correct += (predicted == labels).sum().item()
+        
+        val_acc = (val_correct / val_total) * 100
+        print('Validation Accuracy of the model on the validation images: {} %'.format(val_acc))
+        
                 
     # Set model to evaluation
+    print('\nTESTING PHASE: ')
     modelA.eval()
     with torch.no_grad():
         correct = 0
