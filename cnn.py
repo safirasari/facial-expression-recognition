@@ -8,6 +8,13 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_f
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+ # Transformation to ensure consistency
+transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),    # 1 channel for grayscale
+    transforms.ToTensor(),                          # Convert to tensor
+    transforms.Normalize((0.5,), (0.5,))            # Center data around 0 (instead of [0,1])
+])
+
 if __name__ == '__main__':
     
     # Hyper-parameters
@@ -185,11 +192,3 @@ if __name__ == '__main__':
                 print(f'Accuracy of {classes[i]}: {accuracy} %')
             else:
                 print(f'No instances of class {classes[i]} in the test set.')
-
-
- # Transformation to ensure consistency
-transform = transforms.Compose([
-    transforms.Grayscale(num_output_channels=1),    # 1 channel for grayscale
-    transforms.ToTensor(),                          # Convert to tensor
-    transforms.Normalize((0.5,), (0.5,))            # Center data around 0 (instead of [0,1])
-])

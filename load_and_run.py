@@ -1,36 +1,33 @@
 import argparse
 import os
 import torch
-from PIL import Image as img
+from PIL import Image
 from cnn import transform
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-parser = argparse.ArgumentParser()
+classes = ('neutral', 'focused', 'angry', 'happy')
 
-parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2'], help="Select model to run")
-parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, or select an image file to run the model on")
-args = parser.parse_args()
+def plot_table(modelName, acc, prec, recall, f1, prec_micro, recall_micro, f1_micro): 
+    table_data = [["Model","Macro P","Macro R","Macro F","Micro P","Micro R","Micro F","Accuracy"], 
+                [modelName, prec, recall, f1, prec_micro, recall_micro, f1_micro, acc]]
+    fig, ax = plt.subplots() 
+    ax.axis("off") #remove axis
+    table = ax.table(cellText=table_data, loc="center", cellLoc="center")
+    for (i, j), cell in table.get_celld().items(): #formatting in bold the first row
+        if i == 0:
+            cell.set_text_props(fontweight="bold")
+    plt.rcParams.update({'font.size': 16})
+    plt.show()
 
-
-if args.Model == "main":
-    model = torch.load("main.pt")
-elif args.Model == "v1":
-    model = torch.load("v1.pt")
-elif args.Model == "v2":
-    model = torch.load("v2.pt")
-
-if args.Data != "test" and args.Data != "validation":
-    current_dir = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
-    path_folder_pics = os.path.join(current_dir, 'datasets')
-    imageName = args.Data
-
-
-def evaluate_model(model, test_loader):
+def evaluate_model(model, dataLoader):
     model.eval()
     y_true = []
     y_pred = []
     
     with torch.no_grad():
-        for images, labels in test_loader:
+        for images, labels in dataLoader:
             outputs = model(images)
             _, predicted = torch.max(outputs, 1)
             y_true.extend(labels.numpy()) #
@@ -53,7 +50,7 @@ def evaluate_model(model, test_loader):
     return cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro
 
 #function to generate confusion matrix
-def plot_confusion_matrix(cm, title='Confusion Matrix'):
+def plot_confusion_matrix(cm, title):
     plt.figure(figsize=(8,6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=classes, yticklabels=classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
     plt.title(title)
@@ -61,31 +58,62 @@ def plot_confusion_matrix(cm, title='Confusion Matrix'):
     plt.ylabel('True')
     plt.show()
 
-# Evaluate models
-cm_main, acc_main, prec_main, recall_main, f1_main, prec_micro_main, recall_micro_main,  f1_micro_main = evaluate_model(modelA, test_loader)
-#cm_variant1, acc_variant1, prec_variant1, recall_variant1, f1_variant1, prec_micro_variant1, recall_micro_variant1, f1_micro_variant1 = evaluate_model(variant1_model, test_loader)
-#cm_variant2, acc_variant2, prec_variant2, recall_variant2, f1_variant2, prec_micro_variant2, recall_micro_variant2, f1_micro_variant2 = evaluate_model(variant2_model, test_loader)
+def find_image(dataPath, imageName):
+    for dirPath, _, fileNames in os.walk(dataPath):
+        for fileName in fileNames:
+            if fileName == imageName:
+                imagePath = os.path.join(dirPath, fileName)
+                imageClass = dirPath.split("/")
+                return imagePath, imageClass
+    return None
+            
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
 
-# Plot confusion matrices
-plot_confusion_matrix(cm_main, title='Confusion Matrix - Main Model')
-#plot_confusion_matrix(cm_variant1, title='Confusion Matrix - Variant 1')
-#plot_confusion_matrix(cm_variant2, title='Confusion Matrix - Variant 2')
+    parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2'], help="Select model to run")
+    parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, or select an image file to run the model on")
+    args = parser.parse_args()
+
+    if args.Model == "main":
+        model = torch.load("main.pt")
+        modelName = "Main Model"
+    elif args.Model == "v1":
+        model = torch.load("v1.pt")
+        modelName = "Variant 1"
+    elif args.Model == "v2":
+        model = torch.load("v2.pt")
+        modelName = "Variant 2"
+
+    if args.Data != "test" and args.Data != "validation":
+        imageName = args.Data
+        print(modelName, " predicting the class of image ",  imageName)
+        current_dir = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
+        path_folder_pics = os.path.join(current_dir, 'datasets')
+        imagePath, imageClass = find_image(imageName)
+        if imagePath is None:
+            print("Image ", imageName, " not found.")
+        imageToPredict = Image.open(imagePath)
+        imageToPredict = transform(imageToPredict).unsqueeze(0) # not sure about unsqueeze, adds batch dimension to image
+        model.eval()
+        with torch.no_grad():
+            output = model(imageToPredict)
+            _, prediction = torch.max(output, 1)
+        print("Actual class: ", imageClass)
+        print(modelName, " predicted: ", prediction)
+
+# need to figure out how to get the data sets
+    else:
+        #if args.Data != "test":
+            #dataLoader = 
+        #elif args.Data != "validation":
+            #dataLoader =
+
+         # Evaluate models
+        cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro = evaluate_model(model, dataLoader)
+
+        # Plot confusion matrices
+        plot_confusion_matrix(cm, title='Confusion Matrix - ' + modelName)
+        plot_table(modelName, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro)
 
 
-def plot_table(): 
-    table_data = [["Model","Macro P","Macro R","Macro F","Micro P","Micro R","Micro F","Accuracy"], 
-                ["Main Model", prec_main, recall_main, f1_main, prec_micro_main, recall_micro_main, f1_micro_main, acc_main], 
-                ["Variant 1", 5, 6, 7, 1, 2, 3, 8], 
-                ["Variant 2", 9, 10, 11, 1, 2, 3, 12]]
-    fig, ax = plt.subplots() 
-    ax.axis("off") #remove axis
-    table = ax.table(cellText=table_data, loc="center", cellLoc="center")
-    for (i, j), cell in table.get_celld().items(): #formatting in bold the first row
-        if i == 0:
-            cell.set_text_props(fontweight="bold")
-    plt.rcParams.update({'font.size': 16})
-    plt.show()
 
-plot_table()
-
-def find_subfolder(imageName):
