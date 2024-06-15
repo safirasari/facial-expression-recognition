@@ -1,121 +1,61 @@
 import torch
 import torch.nn as nn
-import torchvision.transforms as transforms
-from torchvision.datasets import ImageFolder
-from torch.utils.data import DataLoader, SubsetRandomSampler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
-import matplotlib.pyplot as plt
-# import seaborn as sns
+import data_loaders as data
 
- # Transformation to ensure consistency
-transform = transforms.Compose([
-    transforms.Grayscale(num_output_channels=1),    # 1 channel for grayscale
-    transforms.ToTensor(),                          # Convert to tensor
-    transforms.Normalize((0.5,), (0.5,))            # Center data around 0 (instead of [0,1])
-])
+ # Defining different layers of the network 
+class CNN(nn.Module):
+    def __init__(self):
+        super(CNN, self).__init__()
+        self.conv_layer = nn.Sequential(
+            nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding=2),
+            nn.BatchNorm2d(32),
+            nn.LeakyReLU(inplace=True),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=5, padding=2),
+            nn.BatchNorm2d(32),
+            nn.LeakyReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU(inplace=True),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5, padding=2),
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+        
+        self.fc_layer = nn.Sequential(
+            nn.Dropout(p=0.25),
+            # nn.Linear(64 * 10 * 10, 1000),         # kernel 2x2
+            nn.Linear(12 * 12 * 64, 1000),         # kernel 3x3, 5x5, 7x7
+            nn.ReLU(inplace=True),
+            nn.Linear(1000, 512),
+            nn.ReLU(inplace=True),
+            nn.Dropout(p=0.25),
+            nn.Linear(512, 4)       # 4 classes
+        )
+        
+        
+    def forward(self, x):
+        # conv layers
+        x = self.conv_layer(x)
+        # flatten
+        x = x.view(x.size(0), -1)
+        # fc layer
+        x = self.fc_layer(x)
+        
+        return x
+ # End of CNN subclass
 
 if __name__ == '__main__':
     
     # Hyper-parameters
     num_epochs = 15         # Min of 10 epochs
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
-    learning_rate = 0.0005
-    
-    train_batch_size = 32
-    val_batch_size = 32
-    test_batch_size = 1000
-    
-    # Transformation to ensure consistency
-    transform = transforms.Compose([
-        transforms.Grayscale(num_output_channels=1),    # 1 channel for grayscale
-        transforms.ToTensor(),                          # Convert to tensor
-        transforms.Normalize((0.5,), (0.5,))            # Center data around 0 (instead of [0,1])
-    ])
-    
+    learning_rate = 0.0001
 
-    # Load the dataset
-    dataset = ImageFolder(root='./datasets', transform=transform)
-    
-    # Split dataset into sets of train, validation, and test
-    train_ratio = 0.7
-    val_ratio = 0.15
-    test_ratio = 0.15
-    
-    # Sizes of each split
-    num_samples = len(dataset)
-    num_train = int(train_ratio * num_samples)
-    num_val = int(val_ratio * num_samples)
-    num_test = num_samples - num_train - num_val
-    
-    # Create indices for each split
-    indices = list(range(num_samples))
-    train_indices, remaining_indices = train_test_split(indices, test_size=(val_ratio + test_ratio), random_state=42)
-    val_indices, test_indices = train_test_split(remaining_indices, test_size=(test_ratio / (val_ratio + test_ratio)), random_state=42)
-    
-    # Create data samplers
-    train_sampler = SubsetRandomSampler(train_indices)
-    val_sampler = SubsetRandomSampler(val_indices)
-    test_sampler = SubsetRandomSampler(test_indices)
-    
-    # Define batch sizes
-    train_batch_size = 32
-    val_batch_size = 32
-    test_batch_size = 1000
-    
-    # Create DataLoaders for each set
-    train_loader = DataLoader(dataset, batch_size=train_batch_size, sampler=train_sampler)
-    val_loader = DataLoader(dataset, batch_size=val_batch_size, sampler=val_sampler)
-    test_loader = DataLoader(dataset, batch_size=test_batch_size, sampler=test_sampler)
-    
     classes = ('neutral', 'focused', 'angry', 'happy')
 
-    print("Number of images in dataset:", len(dataset))
-
-    # Defining different layers of the network
-    class CNN(nn.Module):
-        def __init__(self):
-            super(CNN, self).__init__()
-            self.conv_layer = nn.Sequential(
-                nn.Conv2d(in_channels=1, out_channels=32, kernel_size=5, padding=2),
-                nn.BatchNorm2d(32),
-                nn.LeakyReLU(inplace=True),
-                nn.Conv2d(in_channels=32, out_channels=32, kernel_size=5, padding=2),
-                nn.BatchNorm2d(32),
-                nn.LeakyReLU(inplace=True),
-                nn.MaxPool2d(kernel_size=2, stride=2),
-                nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
-                nn.BatchNorm2d(64),
-                nn.LeakyReLU(inplace=True),
-                nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5, padding=2),
-                nn.BatchNorm2d(64),
-                nn.LeakyReLU(inplace=True),
-                nn.MaxPool2d(kernel_size=2, stride=2),
-            )
-            
-            self.fc_layer = nn.Sequential(
-                nn.Dropout(p=0.5),
-                # nn.Linear(64 * 10 * 10, 1000),         # kernel 2x2
-                nn.Linear(12 * 12 * 64, 1000),         # kernel 3x3, 5x5, 7x7
-                nn.ReLU(inplace=True),
-                nn.Linear(1000, 512),
-                nn.ReLU(inplace=True),
-                nn.Dropout(p=0.5),
-                nn.Linear(512, 4)       # 4 classes
-            )
-            
-            
-        def forward(self, x):
-            # conv layers
-            x = self.conv_layer(x)
-            # flatten
-            x = x.view(x.size(0), -1)
-            # fc layer
-            x = self.fc_layer(x)
-            
-            return x
-    # End of CNN subclass
-
+    print("Number of images in dataset:", len(data.dataset))
 
     # Creating the model
     modelA = CNN()
@@ -123,17 +63,22 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(modelA.parameters(), lr=learning_rate)
     
-    total_step = len(train_loader)
+    total_step = len(data.train_loader)
     loss_list = []
     acc_list = []
-    
+    total = 0
+
+    best_val_loss = None
+    best_epoch = 0
+    patience = 5
+
     # Training the model
     print('\nTRAINING PHASE:')
     for epoch in range(num_epochs):
         
         modelA.train()              # Training mode
         
-        for i, (images, labels) in enumerate(train_loader):
+        for i, (images, labels) in enumerate(data.train_loader):
             
             # Forward pass
             outputs = modelA(images)
@@ -159,16 +104,30 @@ if __name__ == '__main__':
         # Validation phase
         modelA.eval()
         val_correct = 0
+        val_loss = 0
         val_total = 0
         with torch.no_grad():
-            for images, labels in val_loader:
+            for images, labels in data.val_loader:
                 outputs = modelA(images)
                 _, predicted = torch.max(outputs.data, 1)
                 val_total += labels.size(0)
                 val_correct += (predicted == labels).sum().item()
+                val_loss += criterion(outputs, labels).item() * labels.size(0)
+        val_loss /= val_total
         
         val_acc = (val_correct / val_total) * 100
         print('Validation Accuracy of the model on the validation images: {} %'.format(val_acc))
+        print('Epoch [{}/{}], Validation Loss: {:.4f}'
+                .format(epoch + 1, num_epochs, val_loss))
+        if best_val_loss is None or val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_epoch = epoch
+            torch.save(modelA.state_dict(), "./models/best_main_model.pt")
+        elif epoch - best_epoch > patience:
+            print("Stopped training at epoch ",epoch + 1)
+            print("Main model saved at epoch ",epoch-2)
+            break
+        
         
                 
     # Set model to evaluation
@@ -180,7 +139,7 @@ if __name__ == '__main__':
         class_correct = [0 for i in range(4)]
         class_total = [0 for i in range(4)]
                
-        for images, labels in test_loader:
+        for images, labels in data.test_loader:
             
             # Prediction
             outputs = modelA(images)
@@ -189,15 +148,6 @@ if __name__ == '__main__':
             correct += (predicted == labels).sum().item()
             
             # Calculating accuracy of each class
-            '''
-            for i in range(num_classes):
-                label = labels[i]
-                pred = predicted[i]
-                if (label == pred):
-                    class_correct[label] += 1
-                class_total[label] += 1
-            '''  
-            
             for label, pred in zip(labels, predicted):
                 if label == pred:
                     class_correct[label] += 1
