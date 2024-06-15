@@ -2,12 +2,12 @@ import argparse
 import os
 import torch
 from PIL import Image
-from cnn import transform
+import data_loaders as data
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
 import matplotlib.pyplot as plt
 import seaborn as sns
+from cnn import CNN
 
-classes = ('neutral', 'focused', 'angry', 'happy')
 
 def plot_table(modelName, acc, prec, recall, f1, prec_micro, recall_micro, f1_micro): 
     table_data = [["Model","Macro P","Macro R","Macro F","Micro P","Micro R","Micro F","Accuracy"], 
@@ -52,7 +52,7 @@ def evaluate_model(model, dataLoader):
 #function to generate confusion matrix
 def plot_confusion_matrix(cm, title):
     plt.figure(figsize=(8,6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=classes, yticklabels=classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.classes, yticklabels=data.classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
     plt.title(title)
     plt.xlabel('Predicted')
     plt.ylabel('True')
@@ -63,7 +63,7 @@ def find_image(dataPath, imageName):
         for fileName in fileNames:
             if fileName == imageName:
                 imagePath = os.path.join(dirPath, fileName)
-                imageClass = dirPath.split("/")
+                imageClass = dirPath.split('\\')[-1]
                 return imagePath, imageClass
     return None
             
@@ -73,9 +73,10 @@ if __name__ == '__main__':
     parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2'], help="Select model to run")
     parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, or select an image file to run the model on")
     args = parser.parse_args()
-
+    
     if args.Model == "main":
-        model = torch.load("main.pt")
+        model = CNN()
+        model.load_state_dict(torch.load("./models/best_main_model.pt"))
         modelName = "Main Model"
     elif args.Model == "v1":
         model = torch.load("v1.pt")
@@ -86,27 +87,27 @@ if __name__ == '__main__':
 
     if args.Data != "test" and args.Data != "validation":
         imageName = args.Data
-        print(modelName, " predicting the class of image ",  imageName)
+        print(modelName,"predicting the class of image",imageName)
         current_dir = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
         path_folder_pics = os.path.join(current_dir, 'datasets')
-        imagePath, imageClass = find_image(imageName)
+        imagePath, imageClass = find_image(path_folder_pics, imageName)
         if imagePath is None:
-            print("Image ", imageName, " not found.")
+            print("Image",imageName,"not found.")
         imageToPredict = Image.open(imagePath)
-        imageToPredict = transform(imageToPredict).unsqueeze(0) # not sure about unsqueeze, adds batch dimension to image
+        imageToPredict = data.transform(imageToPredict).unsqueeze(0) # not sure about unsqueeze, adds batch dimension to image
         model.eval()
         with torch.no_grad():
             output = model(imageToPredict)
             _, prediction = torch.max(output, 1)
-        print("Actual class: ", imageClass)
-        print(modelName, " predicted: ", prediction)
+        print("Actual class:",imageClass)
+        print(modelName,"predicted: ",data.classes[prediction.item()])
 
 # need to figure out how to get the data sets
     else:
-        #if args.Data != "test":
-            #dataLoader = 
-        #elif args.Data != "validation":
-            #dataLoader =
+        if args.Data == "test":
+            dataLoader = data.test_loader
+        elif args.Data == "validation":
+            dataLoader = data.val_loader
 
          # Evaluate models
         cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro = evaluate_model(model, dataLoader)
