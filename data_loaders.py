@@ -34,10 +34,6 @@ train_sampler = SubsetRandomSampler(train_indices)
 val_sampler = SubsetRandomSampler(val_indices)
 test_sampler = SubsetRandomSampler(test_indices)
 
-# train_sampler = SequentialSampler(train_indices)
-# val_sampler = SequentialSampler(val_indices)
-# test_sampler = SequentialSampler(test_indices)
-
 # Define batch sizes
 train_batch_size = 32
 val_batch_size = 32

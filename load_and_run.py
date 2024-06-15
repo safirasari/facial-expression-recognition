@@ -49,7 +49,7 @@ def evaluate_model(model, dataLoader):
 
     return cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro
 
-#function to generate confusion matrix
+#Generate confusion matrix
 def plot_confusion_matrix(cm, title):
     plt.figure(figsize=(8,6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.classes, yticklabels=data.classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
@@ -58,6 +58,7 @@ def plot_confusion_matrix(cm, title):
     plt.ylabel('True')
     plt.show()
 
+# Find the image within the given folder and return its folder and its path
 def find_image(dataPath, imageName):
     for dirPath, _, fileNames in os.walk(dataPath):
         for fileName in fileNames:
@@ -68,12 +69,15 @@ def find_image(dataPath, imageName):
     return None
             
 if __name__ == '__main__':
+
+    # Define script arguments
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2'], help="Select model to run")
     parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, or select an image file to run the model on")
     args = parser.parse_args()
     
+    #Load chosen model
     if args.Model == "main":
         model = CNN()
         model.load_state_dict(torch.load("./models/best_main_model.pt"))
@@ -85,7 +89,9 @@ if __name__ == '__main__':
         model = torch.load("v2.pt")
         modelName = "Variant 2"
 
+    classesInOrder = ('angry', 'focused', 'happy', 'neutral')
     if args.Data != "test" and args.Data != "validation":
+        # Find and load the image
         imageName = args.Data
         print(modelName,"predicting the class of image",imageName)
         current_dir = os.path.dirname(__file__) if "__file__" in locals() else os.getcwd()
@@ -95,14 +101,16 @@ if __name__ == '__main__':
             print("Image",imageName,"not found.")
         imageToPredict = Image.open(imagePath)
         imageToPredict = data.transform(imageToPredict).unsqueeze(0) # not sure about unsqueeze, adds batch dimension to image
+
+        # Predict image class with loaded model
         model.eval()
         with torch.no_grad():
             output = model(imageToPredict)
             _, prediction = torch.max(output, 1)
         print("Actual class:",imageClass)
-        print(modelName,"predicted: ",data.classes[prediction.item()])
+        print(modelName,"predicted: ",classesInOrder[prediction.item()])
 
-# need to figure out how to get the data sets
+    # Load data loaders if test or validation is chosen
     else:
         if args.Data == "test":
             dataLoader = data.test_loader
