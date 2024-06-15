@@ -70,9 +70,8 @@ if __name__ == '__main__':
 
     best_val_loss = None
     best_epoch = 0
-    patience = 3
+    patience = 5
 
-    
     # Training the model
     print('\nTRAINING PHASE:')
     for epoch in range(num_epochs):
