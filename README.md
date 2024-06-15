@@ -31,7 +31,8 @@ Using PyTorch, the CNN architecture is defined through the optimization of vario
 - Originality Form: 1 for each member included in the report
   
 
-## Setup
+## Executing the code
+### Setup
 This Python project was made using Spyder, Anaconda Prompt and the virtual environment created in class named `comp472`
 For the scripts to run correctly, the datasets need to be in the same relative directory to the script and the folders set up the same way as in this repository :
 
@@ -57,14 +58,17 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     ```
     $ conda install pytorch torchvision -c pytorch
     ```
-    
+    - Seaborn
+    ```
+    $ conda install seaborn
+    ```
 
 3. Open the repository in which the Python script is in:
     ```
     $ cd "repository"
     ```
-
-4. For Part 1, run the Python script for data cleaning and standardization:
+### Part 1
+4. Run the Python script for data cleaning and standardization:
     ```
     $ python data_cleaning.py
     ```
@@ -82,9 +86,23 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     $ python sample_images_focused.py
     $ python sample_images_happy.py
     ```
-6. For part 2, run the model:
+### Part 2
+6. Run the Python script to train the main model:
     ```
     $ python cnn.py
     ```
-7. 
+    The main model will be saved in the _models_ folder under the name _best_main_model.ph_.
+7. Run the Python scripts to train the variant models:
+    ```
+  
+    ```
+    ```
+  
+    ```
+8. Run the Python script to load and run the models:
+    ```
+    $ python load_and_run.py --Model MODEL --Data DATA
+    ```
+   - The Model parameter (-m or --Model) expects _main_, _v1_ or _v2_. This is the model that will run.
+   - The Data parameter (-d or --Data) expects either _test_, _validation_, or any image name. Providing an image name will run the model on the image and output the prediction, and the other two will evaluate the model on the input set.
    
