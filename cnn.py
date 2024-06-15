@@ -126,6 +126,12 @@ if __name__ == '__main__':
     total_step = len(train_loader)
     loss_list = []
     acc_list = []
+    total = 0
+
+    best_val_loss = None
+    best_epoch = 0
+    patience = 3
+
     
     # Training the model
     print('\nTRAINING PHASE:')
@@ -147,28 +153,35 @@ if __name__ == '__main__':
             optimizer.step()
             
             # Train accuracy
-            total = labels.size(0)
-            _, predicted = torch.max(outputs.data, 1)
-            correct = (predicted == labels).sum().item()
-            acc_list.append(correct / total)
+            # total = labels.size(0)
+            # _, predicted = torch.max(outputs.data, 1)
+            # correct = (predicted == labels).sum().item()
+            # acc_list.append(correct / total)
             
-            if (i + 1) % 10 == 0:
-                print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
-                      .format(epoch + 1, num_epochs, i + 1, total_step, loss.item(),(correct / total) * 100))
+            # if (i + 1) % 10 == 0:
+            #     print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
+            #           .format(epoch + 1, num_epochs, i + 1, total_step, loss.item(),(correct / total) * 100))
                 
         # Validation phase
         modelA.eval()
         val_correct = 0
-        val_total = 0
+        val_loss = 0
         with torch.no_grad():
             for images, labels in val_loader:
                 outputs = modelA(images)
                 _, predicted = torch.max(outputs.data, 1)
-                val_total += labels.size(0)
-                val_correct += (predicted == labels).sum().item()
+                total += labels.size(0)
+                val_loss += criterion(outputs, labels).item() * labels.size(0)
+        val_loss /= len(val_loader.dataset)
+        print('Epoch [{}/{}], Validation Loss: {:.4f}'
+                .format(epoch + 1, num_epochs, i + 1, val_loss))
+        if val_loss < best_val_loss or best_val_loss is None:
+            best_val_loss = val_loss
+            best_epoch = epoch
+        elif epoch - best_epoch > patience:
+            print("Stopped training at epoch ", epoch)
+            break
         
-        val_acc = (val_correct / val_total) * 100
-        print('Validation Accuracy of the model on the validation images: {} %'.format(val_acc))
         
                 
     # Set model to evaluation

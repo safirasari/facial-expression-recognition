@@ -29,7 +29,7 @@ def evaluate_model(model, dataLoader):
     with torch.no_grad():
         for images, labels in dataLoader:
             outputs = model(images)
-            _, predicted = torch.max(outputs, 1)
+            _, predicted = torch.max(outputs.data, 1)
             y_true.extend(labels.numpy()) #
             y_pred.extend(predicted.numpy()) #
     
