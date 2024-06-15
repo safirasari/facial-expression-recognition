@@ -2,11 +2,8 @@ import torch
 import torch.nn as nn
 import torchvision.transforms as transforms
 from torchvision.datasets import ImageFolder
-from torch.utils.data import DataLoader, SubsetRandomSampler
+from torch.utils.data import DataLoader, SubsetRandomSampler, SequentialSampler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
-import matplotlib.pyplot as plt
-# import seaborn as sns
 
  # Transformation to ensure consistency
 transform = transforms.Compose([
@@ -20,7 +17,7 @@ if __name__ == '__main__':
     # Hyper-parameters
     num_epochs = 15         # Min of 10 epochs
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
-    learning_rate = 0.0005
+    learning_rate = 0.0001
     
     train_batch_size = 32
     val_batch_size = 32
@@ -58,6 +55,10 @@ if __name__ == '__main__':
     val_sampler = SubsetRandomSampler(val_indices)
     test_sampler = SubsetRandomSampler(test_indices)
     
+    # train_sampler = SequentialSampler(train_indices)
+    # val_sampler = SequentialSampler(val_indices)
+    # test_sampler = SequentialSampler(test_indices)
+    
     # Define batch sizes
     train_batch_size = 32
     val_batch_size = 32
@@ -94,13 +95,13 @@ if __name__ == '__main__':
             )
             
             self.fc_layer = nn.Sequential(
-                nn.Dropout(p=0.5),
+                nn.Dropout(p=0.25),
                 # nn.Linear(64 * 10 * 10, 1000),         # kernel 2x2
                 nn.Linear(12 * 12 * 64, 1000),         # kernel 3x3, 5x5, 7x7
                 nn.ReLU(inplace=True),
                 nn.Linear(1000, 512),
                 nn.ReLU(inplace=True),
-                nn.Dropout(p=0.5),
+                nn.Dropout(p=0.25),
                 nn.Linear(512, 4)       # 4 classes
             )
             
@@ -114,6 +115,7 @@ if __name__ == '__main__':
             x = self.fc_layer(x)
             
             return x
+        
     # End of CNN subclass
 
 
@@ -153,33 +155,39 @@ if __name__ == '__main__':
             optimizer.step()
             
             # Train accuracy
-            # total = labels.size(0)
-            # _, predicted = torch.max(outputs.data, 1)
-            # correct = (predicted == labels).sum().item()
-            # acc_list.append(correct / total)
+            total = labels.size(0)
+            _, predicted = torch.max(outputs.data, 1)
+            correct = (predicted == labels).sum().item()
+            acc_list.append(correct / total)
             
-            # if (i + 1) % 10 == 0:
-            #     print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
-            #           .format(epoch + 1, num_epochs, i + 1, total_step, loss.item(),(correct / total) * 100))
+            if (i + 1) % 10 == 0:
+                print('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Accuracy: {:.2f}%'
+                      .format(epoch + 1, num_epochs, i + 1, total_step, loss.item(),(correct / total) * 100))
                 
         # Validation phase
         modelA.eval()
         val_correct = 0
         val_loss = 0
+        val_total = 0
         with torch.no_grad():
             for images, labels in val_loader:
                 outputs = modelA(images)
                 _, predicted = torch.max(outputs.data, 1)
-                total += labels.size(0)
+                # total += labels.size(0)
+                val_total += labels.size(0)
+                val_correct += (predicted == labels).sum().item()
                 val_loss += criterion(outputs, labels).item() * labels.size(0)
         val_loss /= len(val_loader.dataset)
+        
+        val_acc = (val_correct / val_total) * 100
+        print('Validation Accuracy of the model on the validation images: {} %'.format(val_acc))
         print('Epoch [{}/{}], Validation Loss: {:.4f}'
-                .format(epoch + 1, num_epochs, i + 1, val_loss))
+                .format(epoch + 1, num_epochs, val_loss))
         if best_val_loss is None or val_loss < best_val_loss:
             best_val_loss = val_loss
             best_epoch = epoch
         elif epoch - best_epoch > patience:
-            print("Stopped training at epoch ", epoch)
+            print("Stopped training at epoch ", epoch + 1)
             break
         
         
@@ -202,15 +210,6 @@ if __name__ == '__main__':
             correct += (predicted == labels).sum().item()
             
             # Calculating accuracy of each class
-            '''
-            for i in range(num_classes):
-                label = labels[i]
-                pred = predicted[i]
-                if (label == pred):
-                    class_correct[label] += 1
-                class_total[label] += 1
-            '''  
-            
             for label, pred in zip(labels, predicted):
                 if label == pred:
                     class_correct[label] += 1
