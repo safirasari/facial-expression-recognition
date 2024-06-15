@@ -175,7 +175,7 @@ if __name__ == '__main__':
         val_loss /= len(val_loader.dataset)
         print('Epoch [{}/{}], Validation Loss: {:.4f}'
                 .format(epoch + 1, num_epochs, i + 1, val_loss))
-        if val_loss < best_val_loss or best_val_loss is None:
+        if best_val_loss is None or val_loss < best_val_loss:
             best_val_loss = val_loss
             best_epoch = epoch
         elif epoch - best_epoch > patience:
