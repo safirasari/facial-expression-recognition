@@ -39,20 +39,20 @@ def evaluate_model(model, dataLoader):
     precision_micro, recall_micro, f1_micro, _ = precision_recall_fscore_support(y_true, y_pred, average='micro') #compute P, R, F for micro
     
     #put values to 2 decimals
-    accuracy = round(accuracy, 2)
-    precision = round(precision, 2)
-    recall = round(recall, 2)
-    f1 = round(f1, 2)
-    precision_micro = round(precision_micro, 2)
-    recall_micro = round(recall_micro, 2)
-    f1_micro = round(f1_micro, 2)
+    accuracy = round(accuracy, 4)
+    precision = round(precision, 4)
+    recall = round(recall, 4)
+    f1 = round(f1, 4)
+    precision_micro = round(precision_micro, 4)
+    recall_micro = round(recall_micro, 4)
+    f1_micro = round(f1_micro, 4)
 
     return cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro
 
 #Generate confusion matrix
 def plot_confusion_matrix(cm, title):
     plt.figure(figsize=(8,6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.classes, yticklabels=data.classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.dataset.classes, yticklabels=data.classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
     plt.title(title)
     plt.xlabel('Predicted')
     plt.ylabel('True')
