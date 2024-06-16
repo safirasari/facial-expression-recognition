@@ -89,16 +89,17 @@ For the scripts to run correctly, the datasets need to be in the same relative d
 ### Part 2
 6. Run the Python script to train the main model:
     ```
-    $ python cnn.py
+    $ python mainmodel.py
     ```
     The main model will be saved in the _models_ folder under the name _best_main_model.ph_.
 7. Run the Python scripts to train the variant models:
     ```
-  
+    $ python variant1.py
     ```
     ```
-  
+    $ python variant2.py
     ```
+    The variants will be saved in the _models_ folder under the names _best_v1.ph_ and _best_v2.ph_.
 8. Run the Python script to load and run the models:
     ```
     $ python load_and_run.py --Model MODEL --Data DATA
