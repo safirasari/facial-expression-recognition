@@ -6,7 +6,8 @@ import data_loaders as data
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
 import matplotlib.pyplot as plt
 import seaborn as sns
-from cnn import CNN
+from mainmodel import CNN
+from variant2 import CNN_V2
 
 
 def plot_table(modelName, acc, prec, recall, f1, prec_micro, recall_micro, f1_micro): 
@@ -51,8 +52,9 @@ def evaluate_model(model, dataLoader):
 
 #Generate confusion matrix
 def plot_confusion_matrix(cm, title):
+    print(cm)
     plt.figure(figsize=(8,6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.dataset.classes, yticklabels=data.classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.dataset.classes, yticklabels=data.dataset.classes) #better visualization https://www.shiksha.com/online-courses/articles/heatmap-in-seaborn/#:~:text=The%20primary%20purpose%20of%20the,the%20features%20in%20the%20data.
     plt.title(title)
     plt.xlabel('Predicted')
     plt.ylabel('True')
@@ -83,10 +85,12 @@ if __name__ == '__main__':
         model.load_state_dict(torch.load("./models/best_main_model.pt"))
         modelName = "Main Model"
     elif args.Model == "v1":
-        model = torch.load("v1.pt")
+        model = CNN_V2()
+        model.load_state_dict(torch.load("./models/best_v1.pt"))
         modelName = "Variant 1"
     elif args.Model == "v2":
-        model = torch.load("v2.pt")
+        model = CNN_V2()
+        model.load_state_dict(torch.load("./models/best_v2.pt"))
         modelName = "Variant 2"
 
     classesInOrder = ('angry', 'focused', 'happy', 'neutral')
