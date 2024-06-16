@@ -7,6 +7,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_f
 import matplotlib.pyplot as plt
 import seaborn as sns
 from mainmodel import CNN
+from variant1 import CNN_V1
 from variant2 import CNN_V2
 
 
@@ -85,7 +86,7 @@ if __name__ == '__main__':
         model.load_state_dict(torch.load("./models/best_main_model.pt"))
         modelName = "Main Model"
     elif args.Model == "v1":
-        model = CNN_V2()
+        model = CNN_V1()
         model.load_state_dict(torch.load("./models/best_v1.pt"))
         modelName = "Variant 1"
     elif args.Model == "v2":
@@ -104,7 +105,7 @@ if __name__ == '__main__':
         if imagePath is None:
             print("Image",imageName,"not found.")
         imageToPredict = Image.open(imagePath)
-        imageToPredict = data.transform(imageToPredict).unsqueeze(0) # not sure about unsqueeze, adds batch dimension to image
+        imageToPredict = data.transform(imageToPredict).unsqueeze(0)
 
         # Predict image class with loaded model
         model.eval()
