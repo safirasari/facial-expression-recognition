@@ -61,6 +61,7 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     - Seaborn
     ```
     $ conda install seaborn
+    $ pip install seaborn --upgrade
     ```
 
 3. Open the repository in which the Python script is in:
