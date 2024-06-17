@@ -52,7 +52,7 @@ if __name__ == '__main__':
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
     learning_rate = 0.0001
 
-    classes = ('neutral', 'focused', 'angry', 'happy')
+    classes = ('angry', 'focused', 'happy', 'neutral')
 
     print("Number of images in dataset:", len(data.dataset))
 
