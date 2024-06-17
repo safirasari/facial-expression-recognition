@@ -53,7 +53,7 @@ if __name__ == '__main__':
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
     learning_rate = 0.0003
 
-    classes = ('neutral', 'focused', 'angry', 'happy')
+    classes = ('angry', 'focused', 'happy', 'neutral')
 
     print("Number of images in dataset:", len(data.dataset))
 
@@ -128,8 +128,7 @@ if __name__ == '__main__':
             print("Main model saved at epoch ",best_epoch)
             break
         
-        
-                
+                       
     # Set model to evaluation
     print('\nTESTING PHASE: ')
     modelA.eval()
