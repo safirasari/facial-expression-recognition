@@ -41,6 +41,7 @@ class CNN_V1(nn.Module):
         x = self.fc_layer(x)
         
         return x
+     
  # End of CNN subclass
 
 if __name__ == '__main__':
@@ -50,7 +51,7 @@ if __name__ == '__main__':
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
     learning_rate = 0.0003
 
-    classes = ('neutral', 'focused', 'angry', 'happy')
+    classes = ('angry', 'focused', 'happy', 'neutral')
 
     print("Number of images in dataset:", len(data.dataset))
 
