@@ -14,13 +14,16 @@ This project aims to create an AI for a Deep Learning Convolutional Neural Netwo
 Datasets have been taken of various classes, used for training and testing the model. To ensure that the pictures in the dataset are consistent, data cleaning was applied, ensuring that all images are in grayscale and the same dimension (48x48 pixels) for standardization. Data is also visualized, including the class distribution, pixel intensity disribution and sample images. 
 
 ### Part 2: Basic CNN Model & Evaluation
-Using PyTorch, the CNN architecture is defined through the optimization of various hyper-parameters, such as the number of epochs, kernel size, learning rate, number of convolution layers, and more. To prevent overfitting, dropout values were included, along with early stopping. The model underwent a training phase, a validation phase and a testing phase - the overall test accuracy was then measured to assess its prediction on unseen data of facial expressions. 3 types of models are saved: Main Model, Variant 1 and Variant 2. It is then evaluated through precision metrics and plotting the confusion matrix of each class.
+Using PyTorch, the CNN architecture is defined through the optimization of various hyper-parameters, such as the number of epochs, kernel size, learning rate, number of convolution layers, and more. To prevent overfitting, dropout values were included, along with early stopping. The model underwent a training phase, a validation phase and a testing phase - the overall test accuracy was then measured to assess its prediction on unseen data of facial expressions. 3 types of models are saved: Main Model, Variant 1 and Variant 2. It is then evaluated through precision metrics and the confusion matrix of each class was plotted.
 
+### Part 3: Bias Analysis, Model Refinement & Deep Evaluation
+Once the modelling of the CNN architechture has been built, a 10-fold cross-validation (with random shuffling) was performed to enhance the robustness and reliability of the evaluation. Following this technique, the results regarding potential biases in the AI model of the categories 'Age' and 'Gender' were then recorded and analyzed. Additional steps were then taken, such as [], to minimize biases and encourage a more ethical model. 
 
 ## Features
-- Datasets of 4 facial expressions: neutral, focused, angry & happy
-- Data cleaning & visualization
+- Datasets of 4 Facial Expressions: angry, focused, happy & neutral
+- Data Cleaning & Visualization
 - CNN Model & Evaluation (precision metrics and confusion matrices)
+- K-Fold Cross Validation & Bias Analysis
 
 
 ## Deliverables
@@ -68,6 +71,7 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     ```
     $ cd "repository"
     ```
+
 ### Part 1
 4. Run the Python script for data cleaning and standardization:
     ```
@@ -87,12 +91,14 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     $ python sample_images_focused.py
     $ python sample_images_happy.py
     ```
+
 ### Part 2
 6. Run the Python script to train the main model:
     ```
     $ python mainmodel.py
     ```
     The main model will be saved in the _models_ folder under the name _best_main_model.ph_.
+
 7. Run the Python scripts to train the variant models:
     ```
     $ python variant1.py
@@ -101,10 +107,20 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     $ python variant2.py
     ```
     The variants will be saved in the _models_ folder under the names _best_v1.ph_ and _best_v2.ph_.
+
 8. Run the Python script to load and run the models:
     ```
     $ python load_and_run.py --Model MODEL --Data DATA
     ```
    - The Model parameter (-m or --Model) expects _main_, _v1_ or _v2_. This is the model that will run.
    - The Data parameter (-d or --Data) expects either _test_, _validation_, or any image name. Providing an image name will run the model on the image and output the prediction, and the other two will evaluate the model on the input set.
+  
+### Part 3
+9. Run the Python script to load execute the k-fold cross validation:
+    ```
+    $ python [].py
+    ```
+10. 
+
+11. 
    
