@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader, SubsetRandomSampler, SequentialSampler
 from sklearn.model_selection import train_test_split
 import torchvision.transforms as transforms
 
-classes = ('neutral', 'focused', 'angry', 'happy')
+classes = ('angry', 'focused', 'happy', 'neutral')
 
 # Transformation to ensure consistency
 transform = transforms.Compose([
