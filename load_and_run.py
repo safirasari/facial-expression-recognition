@@ -145,7 +145,7 @@ if __name__ == '__main__':
         if needcm:
             plot_confusion_matrix(cm, title='Confusion Matrix - ' + modelName)
         else:
-            print("Number of images in",args.Data,":",len(dataLoader.dataset))
+            print("Number of images in",args.Data,":",len(dataLoader.sampler.indices))
         plot_table(modelName, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro)
 
 
