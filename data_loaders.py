@@ -18,12 +18,13 @@ val_ratio = 0.15
 test_ratio = 0.15
 
 dataset = ImageFolder(root='./datasets', transform=transform)
-middleaged_dataset = ImageFolder(root='./datasets', transform=transform)
-senior_dataset = ImageFolder(root='./datasets', transform=transform)
-young_dataset = ImageFolder(root='./datasets', transform=transform)
-female_dataset = ImageFolder(root='./datasets', transform=transform)
-male_dataset = ImageFolder(root='./datasets', transform=transform)
-other_dataset = ImageFolder(root='./datasets', transform=transform)
+
+middleaged_dataset = ImageFolder(root='./bias_datasets/age/middle-aged', transform=transform)
+senior_dataset = ImageFolder(root='./bias_datasets/age/senior', transform=transform)
+young_dataset = ImageFolder(root='./bias_datasets/age/young', transform=transform)
+female_dataset = ImageFolder(root='./bias_datasets/gender/female', transform=transform)
+male_dataset = ImageFolder(root='./bias_datasets/gender/male', transform=transform)
+othergender_dataset = ImageFolder(root='./bias_datasets/gender/other', transform=transform)
 
 num_samples = len(dataset)
 num_train = int(train_ratio * num_samples)
@@ -49,3 +50,10 @@ test_batch_size = 1000
 train_loader = DataLoader(dataset, batch_size=train_batch_size, sampler=train_sampler)
 val_loader = DataLoader(dataset, batch_size=val_batch_size, sampler=val_sampler)
 test_loader = DataLoader(dataset, batch_size=test_batch_size, sampler=test_sampler)
+
+middleaged_loader = DataLoader(middleaged_dataset, batch_size=test_batch_size, sampler=test_sampler)
+senior_loader = DataLoader(senior_dataset, batch_size=test_batch_size, sampler=test_sampler)
+young_loader = DataLoader(young_dataset, batch_size=test_batch_size, sampler=test_sampler)
+female_loader = DataLoader(female_dataset, batch_size=test_batch_size, sampler=test_sampler)
+male_loader = DataLoader(male_dataset, batch_size=test_batch_size, sampler=test_sampler)
+othergender_loader = DataLoader(middleaged_dataset, batch_size=test_batch_size, sampler=test_sampler)

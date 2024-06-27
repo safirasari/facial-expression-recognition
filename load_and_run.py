@@ -77,7 +77,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2'], help="Select model to run")
-    parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, or select an image file to run the model on")
+    parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, select an image file to run the model on, or select a demographic group to evaluate the model on")
     args = parser.parse_args()
     
     #Load chosen model
@@ -117,16 +117,32 @@ if __name__ == '__main__':
 
     # Load data loaders if test or validation is chosen
     else:
+        needcm = False
         if args.Data == "test":
             dataLoader = data.test_loader
+            needcm = True
         elif args.Data == "validation":
             dataLoader = data.val_loader
+            needcm = True
+        elif args.Data == "middle-aged":
+            dataLoader = data.middleaged_loader
+        elif args.Data == "senior":
+            dataLoader = data.senior_loader
+        elif args.Data == "young":
+            dataLoader = data.young_loader
+        elif args.Data == "female":
+            dataLoader = data.female_loader
+        elif args.Data == "male":
+            dataLoader = data.male_loader
+        elif args.Data == "other":
+            dataLoader = data.othergender_loader
 
          # Evaluate models
         cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro = evaluate_model(model, dataLoader)
 
         # Plot confusion matrices
-        plot_confusion_matrix(cm, title='Confusion Matrix - ' + modelName)
+        if needcm:
+            plot_confusion_matrix(cm, title='Confusion Matrix - ' + modelName)
         plot_table(modelName, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro)
 
 
