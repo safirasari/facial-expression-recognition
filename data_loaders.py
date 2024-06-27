@@ -2,6 +2,7 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader, SubsetRandomSampler, SequentialSampler
 from sklearn.model_selection import train_test_split
 import torchvision.transforms as transforms
+import os
 
 classes = ('angry', 'focused', 'happy', 'neutral')
 
@@ -51,18 +52,13 @@ train_loader = DataLoader(dataset, batch_size=train_batch_size, sampler=train_sa
 val_loader = DataLoader(dataset, batch_size=val_batch_size, sampler=val_sampler)
 test_loader = DataLoader(dataset, batch_size=test_batch_size, sampler=test_sampler)
 
+test_file_names = [os.path.basename(dataset.samples[index][0]) for index in test_indices]
 def create_test_sampler (dataset):
-    num_samples = len(dataset)
-    num_train = int(train_ratio * num_samples)
-    num_val = int(val_ratio * num_samples)
-    num_test = num_samples - num_train - num_val
-
-    # Create indices for each split
-    indices = list(range(num_samples))
-    _, remaining_indices = train_test_split(indices, test_size=(val_ratio + test_ratio), random_state=42)
-    _, test_indices = train_test_split(remaining_indices, test_size=(test_ratio / (val_ratio + test_ratio)), random_state=42)
-
-    # Create data samplers
+    indices = list(range(len(dataset)))
+    test_indices = []
+    for index in indices:
+        if os.path.basename(dataset.samples[index][0]) in test_file_names:
+            test_indices.append(index)
     test_sampler = SubsetRandomSampler(test_indices)
     return test_sampler
 
