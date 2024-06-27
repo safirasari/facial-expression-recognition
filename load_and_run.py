@@ -95,7 +95,8 @@ if __name__ == '__main__':
         modelName = "Variant 2"
 
     classesInOrder = ('angry', 'focused', 'happy', 'neutral')
-    if args.Data != "test" and args.Data != "validation":
+    dataChoices = ("test", "validation", "middle-aged", "senior", "young", "female", "male", "other")
+    if args.Data not in dataChoices:
         # Find and load the image
         imageName = args.Data
         print(modelName,"predicting the class of image",imageName)
@@ -143,6 +144,8 @@ if __name__ == '__main__':
         # Plot confusion matrices
         if needcm:
             plot_confusion_matrix(cm, title='Confusion Matrix - ' + modelName)
+        else:
+            print("Number of images in",args.Data,":",len(dataLoader.dataset))
         plot_table(modelName, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro)
 
 

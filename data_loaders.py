@@ -51,9 +51,25 @@ train_loader = DataLoader(dataset, batch_size=train_batch_size, sampler=train_sa
 val_loader = DataLoader(dataset, batch_size=val_batch_size, sampler=val_sampler)
 test_loader = DataLoader(dataset, batch_size=test_batch_size, sampler=test_sampler)
 
-middleaged_loader = DataLoader(middleaged_dataset, batch_size=test_batch_size, sampler=test_sampler)
-senior_loader = DataLoader(senior_dataset, batch_size=test_batch_size, sampler=test_sampler)
-young_loader = DataLoader(young_dataset, batch_size=test_batch_size, sampler=test_sampler)
-female_loader = DataLoader(female_dataset, batch_size=test_batch_size, sampler=test_sampler)
-male_loader = DataLoader(male_dataset, batch_size=test_batch_size, sampler=test_sampler)
-othergender_loader = DataLoader(middleaged_dataset, batch_size=test_batch_size, sampler=test_sampler)
+def create_test_sampler (dataset):
+    num_samples = len(dataset)
+    num_train = int(train_ratio * num_samples)
+    num_val = int(val_ratio * num_samples)
+    num_test = num_samples - num_train - num_val
+
+    # Create indices for each split
+    indices = list(range(num_samples))
+    _, remaining_indices = train_test_split(indices, test_size=(val_ratio + test_ratio), random_state=42)
+    _, test_indices = train_test_split(remaining_indices, test_size=(test_ratio / (val_ratio + test_ratio)), random_state=42)
+
+    # Create data samplers
+    test_sampler = SubsetRandomSampler(test_indices)
+    return test_sampler
+
+middleaged_loader = DataLoader(middleaged_dataset, batch_size=test_batch_size, sampler=create_test_sampler(middleaged_dataset))
+senior_loader = DataLoader(senior_dataset, batch_size=test_batch_size, sampler=create_test_sampler(senior_dataset))
+young_loader = DataLoader(young_dataset, batch_size=test_batch_size, sampler=create_test_sampler(young_dataset))
+female_loader = DataLoader(female_dataset, batch_size=test_batch_size, sampler=create_test_sampler(female_dataset))
+male_loader = DataLoader(male_dataset, batch_size=test_batch_size, sampler=create_test_sampler(male_dataset))
+othergender_loader = DataLoader(othergender_dataset, batch_size=test_batch_size, sampler=create_test_sampler(othergender_dataset))
+
