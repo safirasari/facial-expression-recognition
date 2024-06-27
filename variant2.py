@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # Hyper-parameters
     num_epochs = 15         # Min of 10 epochs
     num_classes = 4         # 4 classes: neutral, focused, angry, happy
-    learning_rate = 0.0001
+    learning_rate = 0.0003
 
     classes = ('angry', 'focused', 'happy', 'neutral')
 
