@@ -18,6 +18,12 @@ val_ratio = 0.15
 test_ratio = 0.15
 
 dataset = ImageFolder(root='./datasets', transform=transform)
+middleaged_dataset = ImageFolder(root='./datasets', transform=transform)
+senior_dataset = ImageFolder(root='./datasets', transform=transform)
+young_dataset = ImageFolder(root='./datasets', transform=transform)
+female_dataset = ImageFolder(root='./datasets', transform=transform)
+male_dataset = ImageFolder(root='./datasets', transform=transform)
+other_dataset = ImageFolder(root='./datasets', transform=transform)
 
 num_samples = len(dataset)
 num_train = int(train_ratio * num_samples)
