@@ -25,7 +25,7 @@ senior_dataset = ImageFolder(root='./bias_datasets/age/senior', transform=transf
 young_dataset = ImageFolder(root='./bias_datasets/age/young', transform=transform)
 female_dataset = ImageFolder(root='./bias_datasets/gender/female', transform=transform)
 male_dataset = ImageFolder(root='./bias_datasets/gender/male', transform=transform)
-othergender_dataset = ImageFolder(root='./bias_datasets/gender/other', transform=transform)
+
 
 num_samples = len(dataset)
 num_train = int(train_ratio * num_samples)
@@ -67,5 +67,3 @@ senior_loader = DataLoader(senior_dataset, batch_size=test_batch_size, sampler=c
 young_loader = DataLoader(young_dataset, batch_size=test_batch_size, sampler=create_test_sampler(young_dataset))
 female_loader = DataLoader(female_dataset, batch_size=test_batch_size, sampler=create_test_sampler(female_dataset))
 male_loader = DataLoader(male_dataset, batch_size=test_batch_size, sampler=create_test_sampler(male_dataset))
-othergender_loader = DataLoader(othergender_dataset, batch_size=test_batch_size, sampler=create_test_sampler(othergender_dataset))
-
