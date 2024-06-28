@@ -115,18 +115,37 @@ def kfold_cross_validation(model, dataset):
 
         print(f"Fold {fold_num}: Training completed.")
         
+    
         
-        # Evaluating the fold
-        
+        # Evaluation
+        print('\nTESTING PHASE: ')
         model.eval()
-        predictions = []
-        actual = []
         with torch.no_grad():
-            for images, labels in test_load:
+            correct = 0
+            total = 0
+            class_correct = [0 for i in range(4)]
+            class_total = [0 for i in range(4)]
+                   
+            for images, labels in data.test_loader:
+                
+                # Prediction
                 outputs = model(images)
                 _, predicted = torch.max(outputs, 1)
-                predictions.extend(predicted.cpu().numpy())
-                actual.extend(labels.cpu().numpy())
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                
+                # Calculating accuracy of each class
+                for label, pred in zip(labels, predicted):
+                    if label == pred:
+                        class_correct[label] += 1
+                    class_total[label] += 1
+                        
+            # Displaying accuracy overall
+            accuracy = (correct / total) * 100
+            print(f'Correct: {correct}')
+            print(f'Total: {total}')
+            print('Test Accuracy of the model on the test images: {} %'.format(accuracy))
+            # Performance metrics for 1 fold
 
         # Performance metrics for 1 fold
         
