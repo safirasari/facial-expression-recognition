@@ -76,7 +76,7 @@ if __name__ == '__main__':
     # Define script arguments
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2'], help="Select model to run")
+    parser.add_argument("-m", "--Model", default='main', choices=['main', 'v1', 'v2', 'fold1', 'fold2', 'fold3', 'fold4','fold5','fold6','fold7', 'fold8', 'fold9', 'fold1','fold10'], help="Select model to run")
     parser.add_argument("-d", "--Data", default='test', help="Select between test and validation to evaluate the model, select an image file to run the model on, or select a demographic group to evaluate the model on")
     args = parser.parse_args()
     
@@ -93,6 +93,46 @@ if __name__ == '__main__':
         model = CNN_V2()
         model.load_state_dict(torch.load("./models/best_v2.pt"))
         modelName = "Variant 2"
+    elif args.Model == "fold1":
+        model = CNN_F1()
+        model.load_state_dict(torch.load("./models/model_fold_1.pt"))
+        modelName = "Fold 1"
+    elif args.Model == "fold2":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_2.pt"))
+        modelName = "Fold 2"
+    elif args.Model == "fold3":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_3.pt"))
+        modelName = "Fold 3"
+    elif args.Model == "fold4":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_4.pt"))
+        modelName = "Fold 4"
+    elif args.Model == "fold5":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_5.pt"))
+        modelName = "Fold 5"
+    elif args.Model == "fold6":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_6.pt"))
+        modelName = "Fold 6"
+    elif args.Model == "fold7":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_7.pt"))
+        modelName = "Fold 7"
+    elif args.Model == "fold8":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_8.pt"))
+        modelName = "Fold 8"
+    elif args.Model == "fold9":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_9.pt"))
+        modelName = "Fold 9"
+    elif args.Model == "fold10":
+        model = CNN()
+        model.load_state_dict(torch.load("./models/model_fold_10.pt"))
+        modelName = "Fold 10"
 
     classesInOrder = ('angry', 'focused', 'happy', 'neutral')
     dataChoices = ("test", "validation", "middle-aged", "senior", "young", "female", "male", "other")
