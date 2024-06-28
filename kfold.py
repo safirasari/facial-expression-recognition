@@ -20,7 +20,7 @@ def kfold_cross_validation(model, dataset):
     # Set random seed
     torch.manual_seed(42)
     
-    num_epochs = 10
+    num_epochs = 2
     learning_rate = 0.003
     kfold_num = 10
     batch_size = 32
@@ -46,9 +46,12 @@ def kfold_cross_validation(model, dataset):
 
     fold_num = 1
     
+
+    # Create a directory to save the models
+    if not os.path.exists('./models'):
+        os.makedirs('./models')
+
     # K-fold cross-validation
-    
-    
     for train_idx, test_idx in kf.split(dataset):
         
         print(f"FOLD: {fold_num}/{kfold_num}")
@@ -128,7 +131,9 @@ def kfold_cross_validation(model, dataset):
                 print("Main model saved at epoch ",best_epoch)
                 break
 
-        print(f"Fold {fold_num}: Training completed.\n")
+         # Save the model for the current fold
+        torch.save(model.state_dict(), f"./models/model_fold_{fold_num}.pt")
+        print(f"Fold {fold_num}: Training completed and model saved.\n")
 
 
         # Set model to evaluation
