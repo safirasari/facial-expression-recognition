@@ -126,5 +126,7 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     $ python kfold.py
     ```
 10. Run the Python script to load and run the models:
-     ```
-   - The Model parameter (-m or --Model) expects _main_, _v1_ or _v2_, _fold1_, _fold2_, _fold3_, _fold4_, _fold5_, _fold6_, _fold7_, _fold8_, _fold9_, _fold10_. This is the model that will run.
+      ```
+    $ python load_and_run.py --Model MODEL --Data DATA
+    ```
+   - The Model parameter (-m or --Model) expects _main_, _v1_ or _v2_. This is the model that will run.
