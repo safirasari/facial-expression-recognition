@@ -20,7 +20,7 @@ def kfold_cross_validation(model, dataset):
     # Set random seed
     torch.manual_seed(42)
     
-    num_epochs = 10
+    num_epochs = 15
     learning_rate = 0.003
     kfold_num = 10
     batch_size = 32
