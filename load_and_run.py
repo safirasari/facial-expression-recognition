@@ -83,7 +83,7 @@ if __name__ == '__main__':
     #Load chosen model
     if args.Model == "main":
         model = CNN()
-        model.load_state_dict(torch.load("./models/best_main_model.pt"))
+        model.load_state_dict(torch.load("./models/best_final_model.pt"))
         modelName = "Main Model"
     elif args.Model == "v1":
         model = CNN_V1()
@@ -135,8 +135,6 @@ if __name__ == '__main__':
             dataLoader = data.female_loader
         elif args.Data == "male":
             dataLoader = data.male_loader
-        elif args.Data == "other":
-            dataLoader = data.othergender_loader
 
          # Evaluate models
         cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro = evaluate_model(model, dataLoader)
