@@ -122,7 +122,7 @@ if __name__ == '__main__':
         if best_val_loss is None or val_loss < best_val_loss:
             best_val_loss = val_loss
             best_epoch = epoch + 1
-            torch.save(modelA.state_dict(), "./models/best_main_model.pt")
+            torch.save(modelA.state_dict(), "./models/best_final_model.pt")
         elif epoch - best_epoch > patience:
             print("Stopped training at epoch ",epoch + 1)
             print("Main model saved at epoch ",best_epoch)
