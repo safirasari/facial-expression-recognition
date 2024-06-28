@@ -146,6 +146,10 @@ if __name__ == '__main__':
             plot_confusion_matrix(cm, title='Confusion Matrix - ' + modelName)
         else:
             print("Number of images in",args.Data,":",len(dataLoader.sampler.indices))
+            main_dataset_test_size = len(data.test_indices)
+            age_set_size = len(data.young_loader.sampler) + len(data.middleaged_loader.sampler) + len(data.senior_loader.sampler)
+            gender_set_size = len(data.male_loader.sampler) + len(data.female_loader.sampler)
+            print("test", main_dataset_test_size, "age", age_set_size, "gender", gender_set_size)
         plot_table(modelName, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro)
 
 
