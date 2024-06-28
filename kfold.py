@@ -20,7 +20,7 @@ def kfold_cross_validation(model, dataset):
     # Set random seed
     torch.manual_seed(42)
     
-    num_epochs = 10
+    num_epochs = 5
     learning_rate = 0.003
     patience = 5
     kfold_num = 5
@@ -48,15 +48,6 @@ def kfold_cross_validation(model, dataset):
     
     # K-fold cross-validation
     for train, test in kf.split(dataset):
-        
-        
-        train_data = torch.utils.data.Subset(dataset, train)
-        test_data = torch.utils.data.Subset(dataset, test)
-        
-        # Data Loaders:
-        train_load = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
-        test_load = torch.utils.data.DataLoader(test_data, batch_size=batch_size)
-
 
         total_step = len(data.train_loader)
         loss_list = []
