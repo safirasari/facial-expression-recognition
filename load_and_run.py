@@ -94,7 +94,7 @@ if __name__ == '__main__':
         model.load_state_dict(torch.load("./models/best_v2.pt"))
         modelName = "Variant 2"
     elif args.Model == "fold1":
-        model = CNN_F1()
+        model = CNN()
         model.load_state_dict(torch.load("./models/model_fold_1.pt"))
         modelName = "Fold 1"
     elif args.Model == "fold2":
