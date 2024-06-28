@@ -53,11 +53,14 @@ val_loader = DataLoader(dataset, batch_size=val_batch_size, sampler=val_sampler)
 test_loader = DataLoader(dataset, batch_size=test_batch_size, sampler=test_sampler)
 
 test_file_names = [os.path.basename(dataset.samples[index][0]) for index in test_indices]
+val_file_names = [os.path.basename(dataset.samples[index][0]) for index in val_indices]
 def create_test_sampler (dataset):
     indices = list(range(len(dataset)))
     test_indices = []
     for index in indices:
         if os.path.basename(dataset.samples[index][0]) in test_file_names:
+            test_indices.append(index)
+        elif os.path.basename(dataset.samples[index][0]) in val_file_names:
             test_indices.append(index)
     test_sampler = SubsetRandomSampler(test_indices)
     return test_sampler
