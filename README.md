@@ -66,6 +66,11 @@ For the scripts to run correctly, the datasets need to be in the same relative d
     $ conda install seaborn
     $ pip install seaborn --upgrade
     ```
+    - Skorch
+    ```
+    $ pip install skorch
+    ```
+    
 
 3. Open the repository in which the Python script is in:
     ```
@@ -118,9 +123,5 @@ For the scripts to run correctly, the datasets need to be in the same relative d
 ### Part 3
 9. Run the Python script to load execute the k-fold cross validation:
     ```
-    $ python [].py
+    $ python kfold.py
     ```
-10. 
-
-11. 
-   
