@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader, Subset
 from skorch import NeuralNetClassifier
 from sklearn.model_selection import cross_val_score, KFold
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
 
 from mainmodel import CNN
@@ -145,20 +146,47 @@ def kfold_cross_validation(model, dataset):
             print(f'Correct: {correct}')
             print(f'Total: {total}')
             print('Test Accuracy of the model on the test images: {} %'.format(accuracy))
-            # Performance metrics for 1 fold
 
         # Performance metrics for 1 fold
-        
-        # cm, accuracy, precision, recall, f1, precision_micro, recall_micro, f1_micro = evaluate_model(model, dataLoader)
-        
+        accuracy = accuracy_score(all_labels, all_preds)
+        precision_micro = precision_score(all_labels, all_preds, average='micro')
+        recall_micro = recall_score(all_labels, all_preds, average='micro')
+        f1_micro = f1_score(all_labels, all_preds, average='micro')
+        precision_macro = precision_score(all_labels, all_preds, average='macro')
+        recall_macro = recall_score(all_labels, all_preds, average='macro')
+        f1_macro = f1_score(all_labels, all_preds, average='macro')
 
-      
+        # Adding to list
+        accuracy_fold.append(accuracy)
+        precision_micro_fold.append(precision_micro)
+        recall_micro_fold.append(recall_micro)
+        f1_micro_fold.append(f1_micro)
+        precision_macro_fold.append(precision_macro)
+        recall_macro_fold.append(recall_macro)
+        f1_macro_fold.append(f1_macro)
+        
+        print(f'Fold {fold_num} Test Accuracy: {accuracy * 100:.2f}%')
+        
         # Update fold number
         fold_num += 1
         
     
     # Calculate average of performance metrics
+    avg_accuracy = sum(accuracy_fold) / len(accuracy_fold)
+    avg_precision_micro = sum(precision_micro_fold) / len(precision_micro_fold)
+    avg_recall_micro = sum(recall_micro_fold) / len(recall_micro_fold)
+    avg_f1_micro = sum(f1_micro_fold) / len(f1_micro_fold)
 
+    avg_precision_macro = sum(precision_macro_fold) / len(precision_macro_fold)
+    avg_recall_macro = sum(recall_macro_fold) / len(recall_macro_fold)
+    avg_f1_macro = sum(f1_macro_fold) / len(f1_macro_fold)
+
+    print("Average values:")
+    print(f"Average Accuracy: {avg_accuracy:.4f}")
+    print("Micro values: ")
+    print(f"Average Precision: {avg_precision_micro:.4f}, Average Recall: {avg_recall_micro:.4f}, Average F1: {avg_f1_micro:.4f}")
+    print("Macro values: ")
+    print(f"Average Precision: {avg_precision_macro:.4f}, Average Recall: {avg_recall_macro:.4f}, Average F1: {avg_f1_macro:.4f}")
 
 
 if __name__ == "__main__":
